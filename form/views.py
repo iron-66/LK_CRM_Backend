@@ -14,5 +14,6 @@ class TestFormView(View):
         form = TestResultForm(request.POST)
         if form.is_valid():
             form.save()
+            print("Form data saved successfully:", form.cleaned_data)
             return redirect('success_page')
         return render(request, self.template_name, {'form': form, 'telegram_id': telegram_id})
