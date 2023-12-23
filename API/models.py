@@ -3,7 +3,7 @@ from django.db import models
 
 class Student(models.Model):
     full_name = models.CharField(max_length=255)
-    course = models.IntegerField
+    course = models.CharField(max_length=255)
     university = models.CharField(max_length=255)
     email = models.CharField(max_length=255)
     telegram = models.CharField(max_length=255)
