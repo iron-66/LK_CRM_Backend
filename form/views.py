@@ -11,9 +11,14 @@ class TestFormView(View):
         return render(request, self.template_name, {'form': form, 'telegram_id': telegram_id})
 
     def post(self, request, telegram_id):
-        form = TestResultForm(request.POST)
-        if form.is_valid():
-            form.save()
-            print("Form data saved successfully:", form.cleaned_data)
-            return redirect('success_page')
+        if request.method == 'POST':
+            form = TestResultForm(request.POST)
+
+            if form.is_valid():
+                form.save()
+                return redirect('success_page')
+
+        else:
+            form = TestResultForm(initial={'telegram_id': telegram_id})
+
         return render(request, self.template_name, {'form': form, 'telegram_id': telegram_id})

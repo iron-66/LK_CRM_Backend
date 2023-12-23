@@ -2,7 +2,7 @@ from django.db import models
 
 
 class TestResult(models.Model):
-    telegram_id = models.CharField(max_length=255)
+    telegram_id = models.IntegerField()
     task1 = models.IntegerField()
     task2 = models.IntegerField()
     task3 = models.CharField(max_length=255)
