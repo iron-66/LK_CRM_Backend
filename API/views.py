@@ -6,20 +6,21 @@ from .serializers import StudentSerializer
 from django.db import connections
 
 
-# def students_list(request):
-#     check_database_connection()
-#     students = Student.objects.all()
-#     data = [{'full_name': student.full_name, 'course': student.course, 'university': student.university,
-#              'email': student.email, 'telegram': student.telegram, 'speciality': student.speciality,
-#              'degree': student.degree, 'phone': student.phone, 'vk': student.vk} for student in students]
-#     print(data)
-#     return JsonResponse(data, safe=False)
-
-
 class GetStudents(APIView):
     def get(self, request):
         students = Student.objects.all()
         serializer = StudentSerializer(students, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class GetStudentDetails(APIView):
+    def get(self, request, student_id):
+        try:
+            student = Student.objects.get(pk=student_id)
+        except Student.DoesNotExist:
+            return Response({"error": "Student not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = StudentSerializer(student)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
