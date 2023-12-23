@@ -1,8 +1,8 @@
 from django import forms
-from .models import Student
+from .models import TestResult
 
 
-class StudentForm(forms.ModelForm):
+class TestResultForm(forms.ModelForm):
     class Meta:
-        model = Student
-        fields = ['fullname', 'course', 'study_org', 'email', 'telegram']
+        model = TestResult
+        fields = ['telegram_id', 'task1', 'task2', 'task3', 'task4', 'task5']

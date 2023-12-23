@@ -1,28 +1,18 @@
 from django.shortcuts import render, redirect
-from django.db import connection
-from .forms import StudentForm
+from django.views import View
+from .forms import TestResultForm
 
 
-def index(request):
-    if request.method == 'POST':
-        form = StudentForm(request.POST)
+class TestFormView(View):
+    template_name = 'form/index.html'
+
+    def get(self, request, telegram_id):
+        form = TestResultForm(initial={'telegram_id': telegram_id})
+        return render(request, self.template_name, {'form': form, 'telegram_id': telegram_id})
+
+    def post(self, request, telegram_id):
+        form = TestResultForm(request.POST)
         if form.is_valid():
-            fullname = form.cleaned_data['fullname']
-            course = form.cleaned_data['course']
-            study_org = form.cleaned_data['study_org']
-            email = form.cleaned_data['email']
-            telegram = form.cleaned_data['telegram']
-            status = 'new'
-
-            with connection.cursor() as cursor:
-                cursor.execute(
-                    "INSERT INTO students (full_name, course, study_org, email, telegram, status) VALUES (%s, %s, %s, %s, %s, %s)",
-                    [fullname, course, study_org, email, telegram, status]
-                )
-            # return redirect('success_page')
-        else:
-            print("Форма не действительна. Ошибки:", form.errors)
-    else:
-        form = StudentForm()
-
-    return render(request, 'form/index.html', {'form': form})
+            form.save()
+            return redirect('success_page')
+        return render(request, self.template_name, {'form': form, 'telegram_id': telegram_id})

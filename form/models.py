@@ -1,9 +1,13 @@
 from django.db import models
 
 
-class Student(models.Model):
-    fullname = models.CharField(max_length=255)
-    course = models.IntegerField()
-    study_org = models.CharField(max_length=255)
-    email = models.EmailField()
-    telegram = models.CharField(max_length=255)
+class TestResult(models.Model):
+    telegram_id = models.CharField(max_length=255)
+    task1 = models.IntegerField()
+    task2 = models.IntegerField()
+    task3 = models.CharField(max_length=255)
+    task4 = models.IntegerField()
+    task5 = models.IntegerField()
+
+    def __str__(self):
+        return f"Result for {self.telegram_id}"
