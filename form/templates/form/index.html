@@ -35,28 +35,28 @@
         <form class="content" method="post">
             {% csrf_token %}
             <div class="description">
-                <h1>Анкета</h1>
-                <p>Для сбора персональных данных о студенте</p>
+                <h1>Вступительное тестирование</h1>
+                <p>Для студентов - стажёров от компании УЦС</p>
             </div>
 
-            <label class="input">Ваше ФИО</label>
-            <input title="Фио" type="text" name="fullname" class="span3">
+            <label class="input">Определите медиану в представленном массиве целых чисел: [3, 5, 1, 8, 2, 7, 4]</label>
+            <input title="4" type="number" name="fullname" class="span3">
 
-            <label class="input">Курс</label>
-            <input title="Курс" type="number" name="course" class="span3">
+            <label class="input">Если A = 0 и B = 1, определите значение выражения (A/B)&(!A/B)</label>
+            <input title="1" type="number" name="course" class="span3">
 
-            <label class="input">Учебное заведение</label>
-            <input title="Университет" type="text" name="study_org" class="span3">
+            <label class="input">В шахматной доске размером 8 × 8 клеток вырезали крайнюю левую верхнюю и крайнюю правую нижнюю клетки. Можно ли оставшуюся часть доски замостить косточками домино, покрывая одной косточкой ровно две клетки доски? Ответ представить в виде "Да" или "Нет"</label>
+            <input title="Нет" type="text" name="study_org" class="span3">
 
-            <label class="input">Электронная почта</label>
-            <input title="Email" type="email" name="email" class="span3">
+            <label class="input">В одной африканской деревне живет 800 женщин. 3% из них носят по одной серьге, половина жительниц, составляющих остальные 97%, носит по две серьги, а другая половина вообще не носит серег. Сколько серег можно насчитать в ушах у всего женского населения деревни?</label>
+            <input title="800" type="number" name="email" class="span3">
 
-            <label class="input">Телеграм - тэг (для оповещения и отправки ссылки на входное тестирование)</label>
-            <input placeholder="@example" type="text" name="telegram" class="span3">
+            <label class="input">Укажите следующее число последовательности: 5, 11, 23, 47, 95, ...</label>
+            <input title="191" type="number" name="telegram" class="span3">
 
             <label class="input"><input type="checkbox" name="terms"> Я согласен с <a href="#">политикой конфиденциальности</a></label>
 
-            <input type="submit" value="Отправить заявку" class="btn btn-primary pull-right input">
+            <input type="submit" value="Отправить результаты" class="btn btn-primary pull-right input">
             <div class="clearfix"></div>
         </form>
     </div>

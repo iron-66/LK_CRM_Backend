@@ -132,7 +132,7 @@ def ask_vk(message):
 def ask_email(message):
     user_id = message.from_user.id
     user_data[user_id]['email'] = message.text
-    bot.send_message(user_id, 'Отлично. Вы завершили анкетирование!')
+    bot.send_message(user_id, f'Отлично. Вы завершили анкетирование! Ваша персональная ссылка для прохождения вступительного тестирования: http://158.160.137.207:8000/?{user_id}')
 
     save_to_database(user_data[user_id], user_id)
 
