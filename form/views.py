@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from .forms import TestResultForm
+from API.models import Student
 
 
 class TestFormView(View):
@@ -16,8 +17,17 @@ class TestFormView(View):
 
             if form.is_valid():
                 form.save()
-                return redirect('success_page')
 
+                try:
+                    student = Student.objects.get(telegram=telegram_id)
+                    student.is_test_send = True
+                    student.status = 'done_test'
+                    student.save()
+                    print("is_test_send updated successfully for student with telegram_id:", telegram_id)
+                except Student.DoesNotExist:
+                    print("Student with telegram_id", telegram_id, "not found")
+
+                return redirect('success_page')
         else:
             form = TestResultForm(initial={'telegram_id': telegram_id})
 
