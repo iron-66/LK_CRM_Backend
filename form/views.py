@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from .forms import TestResultForm
 from API.models import Student
-from bot.bot import bot
+from bot import bot
 
 
 class TestFormView(View):
