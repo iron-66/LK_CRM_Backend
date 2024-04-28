@@ -75,61 +75,77 @@ class States:
 def start(message):
     user_id = message.from_user.id
     user_data[user_id] = {}
-    bot.send_message(user_id, 'Здравствуйте! Вы перешли к анкетированию для записи на стажировку в Uralintern. Представьтесь, пожалуйста. Напишите Ваше ФИО')
-    bot.register_next_step_handler(message, ask_name)
+    banner = open('Banner.png', 'rb')
+    bot.send_photo(user_id, banner, caption='Здравствуйте!\n\n'
+                            'Вы перешли к анкетированию для записи на стажировку в Uralintern. Для сбора персональных данных с Вами будет проведено анкетирование по следующим пунктам:\n\n'
+                            '1. ФИО\n'
+                            '2. Курс\n'
+                            '3. Учебное заведение\n'
+                            '4. Специальность / направление\n'
+                            '5. Академическая степень\n'
+                            '6. Номер телефона\n'
+                            '7. Ссылка на VK\n'
+                            '8. Адрес электронной почты')
+    ask_name(message)
 
 
 def ask_name(message):
     user_id = message.from_user.id
-    user_data[user_id]['full_name'] = message.text
-    name = message.text.split()
-    bot.send_message(user_id, f'Отлично, {name[1]}, теперь укажите, на каком курсе Вы учитесь')
+    bot.send_message(user_id, 'Представьтесь, пожалуйста. Напишите Ваше ФИО')
     bot.register_next_step_handler(message, ask_course)
 
 
 def ask_course(message):
     user_id = message.from_user.id
-    user_data[user_id]['course'] = message.text
-    bot.send_message(user_id, 'Теперь укажите своё учебное заведение (например, УрФУ)')
+    user_data[user_id]['full_name'] = message.text
+    name = message.text.split()
+    bot.send_message(user_id, f'Отлично, {name[1]}, теперь укажите, на каком курсе Вы учитесь')
     bot.register_next_step_handler(message, ask_university)
 
 
 def ask_university(message):
     user_id = message.from_user.id
-    user_data[user_id]['university'] = message.text
-    bot.send_message(user_id, 'Укажите свою специальность / направление (например, программная инженерия)')
+    user_data[user_id]['course'] = message.text
+    bot.send_message(user_id, 'Теперь укажите своё учебное заведение (например, УрФУ)')
     bot.register_next_step_handler(message, ask_speciality)
 
 
 def ask_speciality(message):
     user_id = message.from_user.id
-    user_data[user_id]['speciality'] = message.text
-    bot.send_message(user_id, 'Укажите свою академическую степень (бакалавриат / специалитет)')
+    user_data[user_id]['university'] = message.text
+    bot.send_message(user_id, 'Укажите свою специальность / направление (например, программная инженерия)')
     bot.register_next_step_handler(message, ask_degree)
 
 
 def ask_degree(message):
     user_id = message.from_user.id
-    user_data[user_id]['degree'] = message.text
-    bot.send_message(user_id, 'Укажите номер своего телефона (+7 9XX XXX XX XX)')
+    user_data[user_id]['speciality'] = message.text
+    bot.send_message(user_id, 'Укажите свою академическую степень (бакалавриат / специалитет)')
     bot.register_next_step_handler(message, ask_phone)
 
 
 def ask_phone(message):
     user_id = message.from_user.id
-    user_data[user_id]['phone'] = message.text
-    bot.send_message(user_id, 'Укажите ссылку на свой VK')
+    user_data[user_id]['degree'] = message.text
+    bot.send_message(user_id, 'Укажите номер своего телефона (+7 9XX XXX XX XX)')
     bot.register_next_step_handler(message, ask_vk)
 
 
 def ask_vk(message):
     user_id = message.from_user.id
-    user_data[user_id]['vk'] = message.text
-    bot.send_message(user_id, 'Укажите адрес своей электронной почты')
+    user_data[user_id]['phone'] = message.text
+    bot.send_message(user_id, 'Укажите ссылку на свой VK')
     bot.register_next_step_handler(message, ask_email)
 
 
 def ask_email(message):
+    user_id = message.from_user.id
+    user_data[user_id]['vk'] = message.text
+    bot.send_message(user_id, 'Укажите адрес своей электронной почты')
+    bot.register_next_step_handler(message, save_to_db)
+
+
+def save_to_db(message):
     user_id = message.from_user.id
     user_data[user_id]['email'] = message.text
     bot.send_message(user_id, f'Отлично. Вы завершили анкетирование! Ваша персональная ссылка для прохождения вступительного тестирования: http://158.160.137.207:8000/{user_id}')
