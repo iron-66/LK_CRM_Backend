@@ -133,6 +133,11 @@ def ask_course(message):
     user_data[user_id]['full_name'] = message.text
     name = message.text.split()
 
+    if len(name) < 3 or not all(word.isalpha() for word in name) or not all(2 <= len(part) <= 20 for part in name):
+        bot.send_message(user_id, 'Пожалуйста, укажите ФИО в корректном формате\n(пример: Иванов Иван Иванович)')
+        bot.register_next_step_handler(message, ask_course)
+        return
+
     if check_student_exists(message.text):
         markup = InlineKeyboardMarkup()
         button = InlineKeyboardButton("Ввести другие данные", callback_data="reenter_data")
@@ -147,6 +152,12 @@ def ask_course(message):
 def ask_university(message):
     user_id = message.from_user.id
     user_data[user_id]['course'] = message.text
+
+    if not message.text.isdigit() or not (1 <= int(message.text) <= 6):
+        bot.send_message(user_id, 'Пожалуйста, укажите курс в диапазоне от 1 до 6')
+        bot.register_next_step_handler(message, ask_university)
+        return
+
     bot.send_message(user_id, 'Теперь укажите своё учебное заведение (например, УрФУ)')
     bot.register_next_step_handler(message, ask_speciality)
 
@@ -168,13 +179,18 @@ def ask_degree(message):
 def ask_phone(message):
     user_id = message.from_user.id
     user_data[user_id]['degree'] = message.text
-    bot.send_message(user_id, 'Укажите номер своего телефона (+7 9XX XXX XX XX)')
+    bot.send_message(user_id, 'Укажите номер своего телефона (В формате 89XXXXXXXXX)')
     bot.register_next_step_handler(message, ask_vk)
 
 
 def ask_vk(message):
     user_id = message.from_user.id
     user_data[user_id]['phone'] = message.text
+    if len(message.text) != 11 or not message.text.isdigit():
+        bot.send_message(user_id,
+                         'Пожалуйста, укажите корректный номер телефона, состоящий из 11 цифр (например, 89123456789)')
+        bot.register_next_step_handler(message, ask_vk)
+        return
     bot.send_message(user_id, 'Укажите ссылку на свой VK')
     bot.register_next_step_handler(message, ask_email)
 
