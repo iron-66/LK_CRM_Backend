@@ -1,6 +1,7 @@
 from telebot import TeleBot
 from telebot import types
 from telebot.apihelper import ApiException
+from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 import psycopg2
 
 
@@ -58,6 +59,31 @@ def save_to_database(user_data, user_id):
             connection.close()
 
 
+def check_student_exists(full_name):
+    try:
+        connection = psycopg2.connect(
+            user="uztawibl",
+            password="HralYemzEzC9p7go8wLzWpmDvfgY0Zga",
+            host="cornelius.db.elephantsql.com",
+            port="5432",
+            database="uztawibl"
+        )
+
+        cursor = connection.cursor()
+        sql_query = "SELECT 1 FROM public.\"API_student\" WHERE full_name = %s"
+        cursor.execute(sql_query, (full_name,))
+        return cursor.fetchone() is not None
+
+    except (Exception, psycopg2.Error) as error:
+        print("Ошибка при работе с базой данных:", error)
+        return False
+
+    finally:
+        if connection:
+            cursor.close()
+            connection.close()
+
+
 class States:
     START = "start"
     ASK_NAME = "ask_name"
@@ -89,6 +115,13 @@ def start(message):
     ask_name(message)
 
 
+@bot.callback_query_handler(func=lambda message: message.data == "reenter_data")
+def reenter_data(message):
+    user_id = message.from_user.id
+    bot.send_message(user_id, 'Пожалуйста, введите ваше ФИО:')
+    bot.register_next_step_handler_by_chat_id(user_id, ask_course)
+
+
 def ask_name(message):
     user_id = message.from_user.id
     bot.send_message(user_id, 'Представьтесь, пожалуйста. Напишите Ваше ФИО')
@@ -99,6 +132,14 @@ def ask_course(message):
     user_id = message.from_user.id
     user_data[user_id]['full_name'] = message.text
     name = message.text.split()
+
+    if check_student_exists(message.text):
+        markup = InlineKeyboardMarkup()
+        button = InlineKeyboardButton("Ввести другие данные", callback_data="reenter_data")
+        markup.add(button)
+        bot.send_message(user_id, 'Такой студент уже подавал заявку. Нажмите на кнопку ниже, если хотите указать другие данные', reply_markup=markup)
+        return
+
     bot.send_message(user_id, f'Отлично, {name[1]}, теперь укажите, на каком курсе Вы учитесь')
     bot.register_next_step_handler(message, ask_university)
 
