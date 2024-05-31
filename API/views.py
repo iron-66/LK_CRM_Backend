@@ -4,6 +4,8 @@ from rest_framework import status
 from .models import Student
 from .serializers import StudentSerializer
 from django.db import connections
+from django.http import HttpResponse
+import openpyxl
 
 
 class GetStudents(APIView):
@@ -22,6 +24,37 @@ class GetStudentDetails(APIView):
 
         serializer = StudentSerializer(student)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ExportStudentsXLSX(APIView):
+    def get(self, request):
+        wb = openpyxl.Workbook()
+        ws = wb.active
+        ws.title = 'Students'
+
+        headers = ['Full Name', 'Course', 'University', 'Email', 'Telegram', 'Status', 'Is Test Send', 'Speciality', 'Degree', 'Phone', 'VK']
+        ws.append(headers)
+
+        for student in Student.objects.all():
+            row = [
+                student.full_name,
+                student.course,
+                student.university,
+                student.email,
+                student.telegram,
+                student.status,
+                'Yes' if student.is_test_send else 'No',
+                student.speciality,
+                student.degree,
+                student.phone,
+                student.vk
+            ]
+            ws.append(row)
+
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=students.xlsx'
+        wb.save(response)
+        return response
 
 
 def check_database_connection():
