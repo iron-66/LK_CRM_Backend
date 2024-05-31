@@ -3,6 +3,7 @@ from telebot import types
 from telebot.apihelper import ApiException
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 import psycopg2
+import re
 
 
 TOKEN = '6730210777:AAErUqdTxdedDM31JFdGqN6DjxeiMFmwxQ0'
@@ -191,7 +192,7 @@ def ask_vk(message):
                          'Пожалуйста, укажите корректный номер телефона, состоящий из 11 цифр (например, 89123456789)')
         bot.register_next_step_handler(message, ask_vk)
         return
-    bot.send_message(user_id, 'Укажите ссылку на свой VK')
+    bot.send_message(user_id, 'Укажите ссылку на свой VK (резервный способ оперативной связи с Вами)')
     bot.register_next_step_handler(message, ask_email)
 
 
@@ -205,6 +206,15 @@ def ask_email(message):
 def save_to_db(message):
     user_id = message.from_user.id
     user_data[user_id]['email'] = message.text
+
+    email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+
+    if not re.match(email_regex, message.text):
+        bot.send_message(user_id,
+                         'Пожалуйста, укажите корректный адрес электронной почты (например, example@mail.ru)')
+        bot.register_next_step_handler(message, save_to_db)
+        return
+
     bot.send_message(user_id, f'Отлично. Вы завершили анкетирование! Ваша персональная ссылка для прохождения вступительного тестирования: http://158.160.137.207:8000/{user_id}')
 
     save_to_database(user_data[user_id], user_id)
