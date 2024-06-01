@@ -36,7 +36,7 @@ class ExportStudentsXLSX(APIView):
         headers = ['ФИО', 'Статус принятия', 'Номер телефона', 'VK', 'Email', 'Учебное заведение', 'Направление', 'Курс', 'Академ. степень', 'Отправил ли тесты', 'Telegram ID']
         ws.append(headers)
 
-        column_widths = [30, 15, 15, 25, 25, 30, 25, 10, 20, 15, 15]  # Пример значений, можно изменить под свои нужды
+        column_widths = [35, 20, 15, 30, 30, 20, 30, 10, 20, 20, 15]
 
         for i, column_width in enumerate(column_widths, start=1):
             col_letter = get_column_letter(i)
