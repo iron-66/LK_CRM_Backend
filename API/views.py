@@ -1,3 +1,4 @@
+from openpyxl.utils import get_column_letter
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -34,6 +35,12 @@ class ExportStudentsXLSX(APIView):
 
         headers = ['ФИО', 'Статус принятия', 'Номер телефона', 'VK', 'Email', 'Учебное заведение', 'Направление', 'Курс', 'Академ. степень', 'Отправил ли тесты', 'Telegram ID']
         ws.append(headers)
+
+        column_widths = [30, 15, 15, 25, 25, 30, 25, 10, 20, 15, 15]  # Пример значений, можно изменить под свои нужды
+
+        for i, column_width in enumerate(column_widths, start=1):
+            col_letter = get_column_letter(i)
+            ws.column_dimensions[col_letter].width = column_width
 
         for student in Student.objects.all():
             row = [
