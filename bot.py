@@ -1,12 +1,15 @@
+import os
+
 from telebot import TeleBot
-from telebot import types
 from telebot.apihelper import ApiException
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 import psycopg2
 import re
+from dotenv import load_dotenv
 
 
-TOKEN = '6730210777:AAErUqdTxdedDM31JFdGqN6DjxeiMFmwxQ0'
+load_dotenv()
+TOKEN = os.getenv("TOKEN")
 bot = TeleBot(TOKEN)
 user_data = {}
 
@@ -20,16 +23,12 @@ def save_to_database(user_data, user_id):
             port="5432",
             database="uztawibl"
         )
-
         cursor = connection.cursor()
-
-        # SQL-запрос для вставки данных в таблицу students
         sql_query = """
             INSERT INTO public."API_student" (full_name, course, university, speciality, degree, telegram, phone, vk, email)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
 
-        # Получаем данные из user_data
         data = (
             user_data['full_name'],
             user_data['course'],
@@ -42,10 +41,7 @@ def save_to_database(user_data, user_id):
             user_data['email']
         )
 
-        # Выполняем SQL-запрос
         cursor.execute(sql_query, data)
-
-        # Применяем изменения
         connection.commit()
 
         print("Данные успешно добавлены в базу данных!")
@@ -54,7 +50,6 @@ def save_to_database(user_data, user_id):
         print("Ошибка при работе с базой данных:", error)
 
     finally:
-        # Закрываем соединение с базой данных
         if connection:
             cursor.close()
             connection.close()
