@@ -1,12 +1,10 @@
 import os
-
 from telebot import TeleBot
 from telebot.apihelper import ApiException
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 import psycopg2
 import re
 from dotenv import load_dotenv
-
 
 load_dotenv()
 TOKEN = os.getenv("TOKEN")
