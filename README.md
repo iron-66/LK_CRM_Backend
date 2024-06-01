@@ -18,3 +18,5 @@ pip install psycopg2-binary
 pip3 install pyTelegramBotAPI
 
 pip install django-cors-headers
+
+python3 manage.py runserver 0:8000
