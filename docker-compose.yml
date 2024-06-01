@@ -1,11 +1,21 @@
 version: '3.8'
 
 services:
-  bot:
+  web:
     build: .
-    ports:
-      - "8000:8000"
-    environment:
-      - TOKEN=6730210777:AAErUqdTxdedDM31JFdGqN6DjxeiMFmwxQ0
+    command: python3 manage.py runserver 0.0.0.0:30960
     volumes:
-      - .:/usr/src/app
+      - .:/app
+    ports:
+      - "30960:30960"
+    depends_on:
+      - db
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_DB: uztawibl
+      POSTGRES_USER: uztawibl
+      POSTGRES_PASSWORD: HralYemzEzC9p7go8wLzWpmDvfgY0Zga
+    ports:
+      - "5432:5432"
