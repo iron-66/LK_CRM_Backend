@@ -32,22 +32,22 @@ class ExportStudentsXLSX(APIView):
         ws = wb.active
         ws.title = 'Students'
 
-        headers = ['Full Name', 'Course', 'University', 'Email', 'Telegram', 'Status', 'Is Test Send', 'Speciality', 'Degree', 'Phone', 'VK']
+        headers = ['ФИО', 'Статус принятия', 'Номер телефона', 'VK', 'Email', 'Учебное заведение', 'Направление', 'Курс', 'Академ. степень', 'Отправил ли тесты', 'Telegram ID']
         ws.append(headers)
 
         for student in Student.objects.all():
             row = [
                 student.full_name,
-                student.course,
-                student.university,
-                student.email,
-                student.telegram,
                 student.status,
-                'Yes' if student.is_test_send else 'No',
-                student.speciality,
-                student.degree,
                 student.phone,
-                student.vk
+                student.vk,
+                student.email,
+                student.university,
+                student.speciality,
+                student.course,
+                student.degree,
+                'Да' if student.is_test_send else 'Нет',
+                student.telegram
             ]
             ws.append(row)
 
