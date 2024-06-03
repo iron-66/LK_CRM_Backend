@@ -27,6 +27,18 @@ class GetStudentDetails(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class UpdateStudentStatus(APIView):
+    def patch(self, request, data):
+        try:
+            new_data = data.split('&')
+            student = Student.objects.get(pk=int(new_data[0]))
+            student.status = new_data[1]
+            student.save()
+            return Response({"message": "Status updated"}, status=status.HTTP_200_OK)
+        except Student.DoesNotExist:
+            return Response({"message": "Student not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
 class ExportStudentsXLSX(APIView):
     def get(self, request):
         wb = openpyxl.Workbook()
