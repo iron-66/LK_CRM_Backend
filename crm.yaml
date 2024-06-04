@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crm-back-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lk-crm-backend
+  template:
+    metadata:
+      labels:
+        app: lk-crm-backend
+    spec:
+      containers:
+      - name: lk-crm-backend
+        image: cr.yandex/crpvk82tu8dn6ej56v6q/lk-crm-backend:latest

@@ -208,7 +208,7 @@ def save_to_db(message):
         bot.register_next_step_handler(message, save_to_db)
         return
 
-    bot.send_message(user_id, f'Отлично. Вы завершили анкетирование! Ваша персональная ссылка для прохождения вступительного тестирования: http://158.160.137.207:8000/{user_id}')
+    bot.send_message(user_id, f'Отлично. Вы завершили анкетирование! Ваша персональная ссылка для прохождения вступительного тестирования: http://158.160.149.229:8000/{user_id}')
 
     save_to_database(user_data[user_id], user_id)
 
