@@ -95,7 +95,7 @@ class States:
 def start(message):
     user_id = message.from_user.id
     user_data[user_id] = {}
-    banner = open('Banner.png', 'rb')
+    banner = open('../Banner.png', 'rb')
     bot.send_photo(user_id, banner, caption='Здравствуйте!\n\n'
                             'Вы перешли к анкетированию для записи на стажировку в Uralintern. Для сбора персональных данных с Вами будет проведено анкетирование по следующим пунктам:\n\n'
                             '1. ФИО\n'
@@ -208,7 +208,7 @@ def save_to_db(message):
         bot.register_next_step_handler(message, save_to_db)
         return
 
-    bot.send_message(user_id, f'Отлично. Вы завершили анкетирование! Ваша персональная ссылка для прохождения вступительного тестирования: http://158.160.149.229:8000/{user_id}')
+    bot.send_message(user_id, f'Отлично. Вы завершили анкетирование! Ваша персональная ссылка для прохождения вступительного тестирования: http://crm.studprzi.beget.tech/{user_id}')
 
     save_to_database(user_data[user_id], user_id)
 

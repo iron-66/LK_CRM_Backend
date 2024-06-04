@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  bot:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - TOKEN=6730210777:AAErUqdTxdedDM31JFdGqN6DjxeiMFmwxQ0
+    volumes:
+      - .:/usr/src/app
