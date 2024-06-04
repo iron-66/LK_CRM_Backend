@@ -95,7 +95,7 @@ class States:
 def start(message):
     user_id = message.from_user.id
     user_data[user_id] = {}
-    banner = open('../Banner.png', 'rb')
+    banner = open('Banner.png', 'rb')
     bot.send_photo(user_id, banner, caption='Здравствуйте!\n\n'
                             'Вы перешли к анкетированию для записи на стажировку в Uralintern. Для сбора персональных данных с Вами будет проведено анкетирование по следующим пунктам:\n\n'
                             '1. ФИО\n'

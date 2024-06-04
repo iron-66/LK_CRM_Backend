@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-6=m9lt_&#ofvw%gpo36mz9pa-(o9_uud7zwtygqx6)v-oo2oj=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'cornelius.db.elephantsql.com', "http://crm.studprzi.beget.tech/", "158.160.171.6", '*']
+ALLOWED_HOSTS = ['localhost', 'cornelius.db.elephantsql.com', "http://crm.studprzi.beget.tech/", '*']
 CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
