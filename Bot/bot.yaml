@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crm-bot-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crm-bot
+  template:
+    metadata:
+      labels:
+        app: crm-bot
+    spec:
+      containers:
+      - name: lk-crm-backend
+        image: cr.yandex/crpvk82tu8dn6ej56v6q/crm-bot:latest

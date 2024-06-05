@@ -1,10 +1,10 @@
 import os
-from telebot import TeleBot
-from telebot.apihelper import ApiException
-from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 import psycopg2
 import re
 from dotenv import load_dotenv
+from telebot import TeleBot
+from telebot.apihelper import ApiException
+from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton
 
 load_dotenv()
 TOKEN = os.getenv("TOKEN")
@@ -139,7 +139,11 @@ def ask_course(message):
         bot.send_message(user_id, 'Такой студент уже подавал заявку. Нажмите на кнопку ниже, если хотите указать другие данные', reply_markup=markup)
         return
 
-    bot.send_message(user_id, f'Отлично, {name[1]}, теперь укажите, на каком курсе Вы учитесь')
+    markup = ReplyKeyboardMarkup(row_width=3, resize_keyboard=True)
+    buttons = [KeyboardButton(str(i)) for i in range(1, 7)]
+    markup.add(*buttons)
+
+    bot.send_message(user_id, f'Отлично, {name[1]}, теперь укажите, на каком курсе Вы учитесь', reply_markup=markup)
     bot.register_next_step_handler(message, ask_university)
 
 
