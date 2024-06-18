@@ -58,6 +58,16 @@
 
             <input type="submit" value="Отправить результаты" class="btn btn-primary pull-right input">
             <div class="clearfix"></div>
+
+            {% if errors %}
+                <div class="alert alert-danger" role="alert">
+                    <ul>
+                        {% for field, error in errors.items %}
+                            <li>{{ field }}: {{ error|join:", " }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
         </form>
     </div>
 </body>
