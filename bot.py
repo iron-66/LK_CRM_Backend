@@ -4,7 +4,7 @@ import re
 from dotenv import load_dotenv
 from telebot import TeleBot
 from telebot.apihelper import ApiException
-from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton
+from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
 
 load_dotenv()
 TOKEN = os.getenv("TOKEN")
@@ -140,7 +140,7 @@ def ask_course(message):
         return
 
     markup = ReplyKeyboardMarkup(row_width=3, resize_keyboard=True)
-    buttons = [KeyboardButton(str(i)) for i in range(1, 7)]
+    buttons = [KeyboardButton(str(i)) for i in range(1, 6)]
     markup.add(*buttons)
 
     bot.send_message(user_id, f'Отлично, {name[1]}, теперь укажите, на каком курсе Вы учитесь', reply_markup=markup)
@@ -151,33 +151,69 @@ def ask_university(message):
     user_id = message.from_user.id
     user_data[user_id]['course'] = message.text
 
-    if not message.text.isdigit() or not (1 <= int(message.text) <= 6):
-        bot.send_message(user_id, 'Пожалуйста, укажите курс в диапазоне от 1 до 6')
+    if not message.text.isdigit() or not (1 <= int(message.text) <= 5):
+        bot.send_message(user_id, 'Пожалуйста, укажите курс в диапазоне от 1 до 5')
         bot.register_next_step_handler(message, ask_university)
         return
 
-    bot.send_message(user_id, 'Теперь укажите своё учебное заведение (например, УрФУ)')
-    bot.register_next_step_handler(message, ask_speciality)
+    markup = ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
+    buttons = [KeyboardButton("УрФУ"), KeyboardButton("Указать другой университет")]
+    markup.add(*buttons)
+
+    bot.send_message(user_id, 'Теперь укажите своё учебное заведение', reply_markup=markup)
+    bot.register_next_step_handler(message, check_university)
+
+
+def check_university(message):
+    user_id = message.from_user.id
+    if message.text == "Указать другой университет":
+        markup = ReplyKeyboardRemove()
+        bot.send_message(user_id, 'Напишите название своего учебного заведения', reply_markup=markup)
+        bot.register_next_step_handler(message, ask_speciality)
+    else:
+        ask_speciality(message)
 
 
 def ask_speciality(message):
     user_id = message.from_user.id
     user_data[user_id]['university'] = message.text
-    bot.send_message(user_id, 'Укажите свою специальность / направление (например, программная инженерия)')
-    bot.register_next_step_handler(message, ask_degree)
+
+    markup = ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+    buttons = [KeyboardButton("Программная инженерия"), KeyboardButton("Информатика и вычислительная техника"),
+               KeyboardButton("Прикладная информатика"), KeyboardButton("Указать другую специальность")]
+    markup.add(*buttons)
+
+    bot.send_message(user_id, 'Укажите свою специальность / направление', reply_markup=markup)
+    bot.register_next_step_handler(message, check_speciality)
+
+
+def check_speciality(message):
+    user_id = message.from_user.id
+    if message.text == "Указать другую специальность":
+        markup = ReplyKeyboardRemove()
+        bot.send_message(user_id, 'Напишите название своей специальности', reply_markup=markup)
+        bot.register_next_step_handler(message, ask_degree)
+    else:
+        ask_degree(message)
 
 
 def ask_degree(message):
     user_id = message.from_user.id
     user_data[user_id]['speciality'] = message.text
-    bot.send_message(user_id, 'Укажите свою академическую степень (бакалавриат / специалитет)')
+
+    markup = ReplyKeyboardMarkup(row_width=3, resize_keyboard=True)
+    buttons = [KeyboardButton("Бакалавриат"), KeyboardButton("Специалитет"), KeyboardButton("Магистратура")]
+    markup.add(*buttons)
+
+    bot.send_message(user_id, 'Укажите свою академическую степень', reply_markup=markup)
     bot.register_next_step_handler(message, ask_phone)
 
 
 def ask_phone(message):
     user_id = message.from_user.id
     user_data[user_id]['degree'] = message.text
-    bot.send_message(user_id, 'Укажите номер своего телефона (В формате 89XXXXXXXXX)')
+    markup = ReplyKeyboardRemove()
+    bot.send_message(user_id, 'Укажите номер своего телефона (В формате 89XXXXXXXXX)', reply_markup=markup)
     bot.register_next_step_handler(message, ask_vk)
 
 

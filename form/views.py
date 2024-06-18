@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.views import View
 from .forms import TestResultForm
 from API.models import Student
-#from bot import bot
 
 
 class TestFormView(View):
@@ -30,7 +29,7 @@ class TestFormView(View):
                 except Student.DoesNotExist:
                     print("Student with telegram_id", telegram_id, "not found")
 
-                #return redirect('success_page')
+                return redirect('https://t.me/H8c789cv8Nvg')
         else:
             form = TestResultForm(initial={'telegram_id': telegram_id})
 
